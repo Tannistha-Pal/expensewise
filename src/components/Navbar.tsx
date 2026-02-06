@@ -48,7 +48,7 @@ const Navbar = () => {
             >
               <Sparkles className="w-5 h-5 text-white" />
             </motion.div>
-            <span className="font-bold text-xl gradient-text">TrackWise</span>
+            <span className="font-bold text-xl gradient-text">expenseWise</span>
           </motion.a>
 
           {/* Desktop Navigation */}
