@@ -38,12 +38,31 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [currency, setCurrencyState] = useState<string>(() =>
     loadFromStorage("ew_currency", "INR")
   );
-  const [budgets, setBudgets] = useState<BudgetCategory[]>(() =>
-    loadFromStorage("ew_budgets", DEFAULT_BUDGETS)
-  );
   const [budgetPreferences, setBudgetPreferences] = useState<BudgetPreferences>(() =>
     loadFromStorage("ew_budget_preferences", { budgetPercent: 60, savingsPercent: 40 })
   );
+
+  const [budgets, setBudgets] = useState<BudgetCategory[]>(() => {
+    const saved = loadFromStorage<BudgetCategory[]>("ew_budgets", DEFAULT_BUDGETS);
+
+    // 🔒 Enforce Bills ≥ 30% on load
+    const total = saved.reduce((sum, b) => sum + b.limit, 0);
+    const bills = saved.find((b) => b.category.toLowerCase() === "bills");
+    const others = saved.filter((b) => b.category.toLowerCase() !== "bills");
+
+    const minBills = total * 0.3;
+    const billsLimit = bills ? Math.max(bills.limit, minBills) : minBills;
+    const remaining = Math.max(total - billsLimit, 0);
+    const otherTotal = others.reduce((sum, b) => sum + b.limit, 0);
+
+    return saved.map((b) => {
+      if (b.category.toLowerCase() === "bills") {
+        return { ...b, limit: Math.round(billsLimit) };
+      }
+      const ratio = otherTotal > 0 ? b.limit / otherTotal : 0;
+      return { ...b, limit: Math.round(remaining * ratio) };
+    });
+  });
 
   useEffect(() => {
     localStorage.setItem("ew_transactions", JSON.stringify(transactions));
@@ -88,16 +107,35 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setBudgetPreferences(prefs);
   }, []);
 
-  const scaleBudgetsToPercent = useCallback((newBudgetPercent: number) => {
-    setBudgets((prev) => {
-      const oldPercent = budgetPreferences.budgetPercent || 100;
-      const scaleFactor = newBudgetPercent / oldPercent;
-      return prev.map((b) => ({
-        ...b,
-        limit: Math.round(b.limit * scaleFactor),
-      }));
-    });
-  }, [budgetPreferences.budgetPercent]);
+  const scaleBudgetsToPercent = useCallback(
+    (newBudgetPercent: number) => {
+      setBudgets((prev) => {
+        const oldPercent = budgetPreferences.budgetPercent || 100;
+        const scaleFactor = newBudgetPercent / oldPercent;
+
+        const totalOld = prev.reduce((sum, b) => sum + b.limit, 0);
+        const newTotal = totalOld * scaleFactor;
+
+        const bills = prev.find((b) => b.category.toLowerCase() === "bills");
+        const others = prev.filter((b) => b.category.toLowerCase() !== "bills");
+
+        const minBills = newTotal * 0.3;
+        const newBills = bills ? Math.max(bills.limit * scaleFactor, minBills) : minBills;
+
+        const remaining = Math.max(newTotal - newBills, 0);
+        const othersOldTotal = others.reduce((sum, b) => sum + b.limit, 0);
+
+        return prev.map((b) => {
+          if (b.category.toLowerCase() === "bills") {
+            return { ...b, limit: Math.round(newBills) };
+          }
+          const ratio = othersOldTotal > 0 ? b.limit / othersOldTotal : 0;
+          return { ...b, limit: Math.round(remaining * ratio) };
+        });
+      });
+    },
+    [budgetPreferences.budgetPercent]
+  );
 
   return (
     <AppContext.Provider

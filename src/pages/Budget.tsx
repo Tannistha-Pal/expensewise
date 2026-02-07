@@ -13,7 +13,7 @@ import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 
 export default function BudgetPage() {
-  const { transactions, budgets, budgetPreferences, updateBudget, updateBudgetPreferences } = useAppContext();
+  const { transactions, budgets, budgetPreferences, updateBudget, updateBudgetPreferences, scaleBudgetsToPercent } = useAppContext();
   const { formatAmount } = useCurrency();
   const [editCategory, setEditCategory] = useState<string | null>(null);
   const [editLimit, setEditLimit] = useState("");
@@ -58,12 +58,13 @@ export default function BudgetPage() {
   };
 
   const handleSavePreferences = () => {
-    updateBudgetPreferences({
-      budgetPercent: tempBudgetPct,
-      savingsPercent: tempSavingsPct,
-    });
-    setShowSettings(false);
-  };
+  scaleBudgetsToPercent(tempBudgetPct);
+  updateBudgetPreferences({
+    budgetPercent: tempBudgetPct,
+    savingsPercent: tempSavingsPct,
+  });
+  setShowSettings(false);
+ };
 
   const getProgressColor = (pct: number) => {
     if (pct >= 90) return "bg-destructive";
