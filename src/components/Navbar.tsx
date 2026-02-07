@@ -2,6 +2,7 @@ import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X, Sparkles } from "lucide-react";
 import { useState } from "react";
 import ThemeToggle from "./ThemeToggle";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +39,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <motion.a
-            href="#"
+            href="/"
             className="flex items-center gap-3 group"
             whileHover={{ scale: 1.02 }}
           >
@@ -79,13 +80,16 @@ const Navbar = () => {
             >
               Login
             </motion.button>
-            <motion.button
-              className="gradient-btn px-6 py-2.5 rounded-xl text-white font-semibold shadow-lg glow-primary"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <span className="relative z-10">Get Started</span>
-            </motion.button>
+
+            <NavLink to="/dashboard">
+              <motion.div
+                className="gradient-btn px-6 py-2.5 rounded-xl text-white font-semibold shadow-lg glow-primary cursor-pointer"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <span className="relative z-10">Get Started</span>
+              </motion.div>
+            </NavLink>
           </div>
 
           {/* Mobile Menu Button */}
@@ -126,9 +130,12 @@ const Navbar = () => {
               <button className="w-full py-3 font-medium text-foreground glass-card">
                 Login
               </button>
-              <button className="w-full py-3 font-semibold text-white gradient-btn rounded-xl">
-                Get Started
-              </button>
+
+              <NavLink to="/dashboard" onClick={() => setIsOpen(false)}>
+                <div className="w-full py-3 font-semibold text-white gradient-btn rounded-xl text-center">
+                  Get Started
+                </div>
+              </NavLink>
             </div>
           </div>
         </motion.div>
