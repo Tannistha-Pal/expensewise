@@ -38,19 +38,17 @@ const Navbar = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <motion.a
-            href="/"
-            className="flex items-center gap-3 group"
-            whileHover={{ scale: 1.02 }}
-          >
-            <motion.div
-              className="w-10 h-10 rounded-xl gradient-btn flex items-center justify-center shadow-lg glow-primary"
-              whileHover={{ rotate: 5 }}
-            >
-              <Sparkles className="w-5 h-5 text-white" />
+          <NavLink to="/" className="flex items-center gap-3 group">
+            <motion.div whileHover={{ scale: 1.02 }} className="flex items-center gap-3">
+              <motion.div
+                className="w-10 h-10 rounded-xl gradient-btn flex items-center justify-center shadow-lg glow-primary"
+                whileHover={{ rotate: 5 }}
+              >
+                <Sparkles className="w-5 h-5 text-white" />
+              </motion.div>
+              <span className="font-bold text-xl gradient-text">expenseWise</span>
             </motion.div>
-            <span className="font-bold text-xl gradient-text">expenseWise</span>
-          </motion.a>
+          </NavLink>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1">

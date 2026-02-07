@@ -1,13 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* TrackWise Premium Design System
-   Modern fintech with blue/purple/teal gradients
-   Glassmorphism + sophisticated animations
-*/
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+/* ============================
+   DESIGN SYSTEM (HSL ONLY)
+============================ */
 
 @layer base {
   :root {
@@ -20,18 +19,15 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 30% 10%;
 
-    /* Vibrant Blue-Purple Primary */
     --primary: 250 84% 54%;
     --primary-foreground: 0 0% 100%;
 
-    /* Teal Secondary */
     --secondary: 175 70% 41%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 220 14% 96%;
     --muted-foreground: 220 10% 45%;
 
-    /* Purple Accent */
     --accent: 280 70% 55%;
     --accent-foreground: 0 0% 100%;
 
@@ -44,16 +40,29 @@
 
     --radius: 1rem;
 
-    /* Gradient Tokens */
-    --gradient-primary: linear-gradient(135deg, hsl(250, 84%, 54%) 0%, hsl(280, 70%, 55%) 50%, hsl(175, 70%, 41%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(250, 84%, 54%) 0%, hsl(280, 70%, 55%) 100%);
-    --gradient-glow: radial-gradient(circle, hsl(250, 84%, 54%, 0.15) 0%, transparent 70%);
-    
-    /* Glass Effect */
+    /* Gradients & Effects */
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(250 84% 54%) 0%,
+      hsl(280 70% 55%) 50%,
+      hsl(175 70% 41%) 100%
+    );
+    --gradient-hero: linear-gradient(
+      135deg,
+      hsl(250 84% 54%) 0%,
+      hsl(280 70% 55%) 100%
+    );
+    --gradient-glow: radial-gradient(
+      circle,
+      hsl(250 84% 54% / 0.15) 0%,
+      transparent 70%
+    );
+
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(255, 255, 255, 0.5);
     --glass-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
 
+    /* Sidebar */
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 250 84% 54%;
@@ -62,6 +71,10 @@
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 250 84% 54%;
+
+    /* Status */
+    --success: 160 84% 39%;
+    --success-foreground: 0 0% 100%;
   }
 
   .dark {
@@ -93,10 +106,23 @@
     --input: 225 20% 20%;
     --ring: 250 84% 65%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(250, 84%, 65%) 0%, hsl(280, 70%, 65%) 50%, hsl(175, 70%, 50%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(250, 84%, 65%) 0%, hsl(280, 70%, 65%) 100%);
-    --gradient-glow: radial-gradient(circle, hsl(250, 84%, 65%, 0.2) 0%, transparent 70%);
-    
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(250 84% 65%) 0%,
+      hsl(280 70% 65%) 50%,
+      hsl(175 70% 50%) 100%
+    );
+    --gradient-hero: linear-gradient(
+      135deg,
+      hsl(250 84% 65%) 0%,
+      hsl(280 70% 65%) 100%
+    );
+    --gradient-glow: radial-gradient(
+      circle,
+      hsl(250 84% 65% / 0.2) 0%,
+      transparent 70%
+    );
+
     --glass-bg: rgba(30, 35, 55, 0.7);
     --glass-border: rgba(255, 255, 255, 0.1);
     --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -109,8 +135,15 @@
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 225 20% 20%;
     --sidebar-ring: 250 84% 65%;
+
+    --success: 160 84% 39%;
+    --success-foreground: 0 0% 100%;
   }
 }
+
+/* ============================
+   BASE STYLES
+============================ */
 
 @layer base {
   * {
@@ -130,6 +163,10 @@
     @apply bg-primary/20 text-primary;
   }
 }
+
+/* ============================
+   COMPONENT CLASSES
+============================ */
 
 @layer components {
   .glass {
@@ -169,12 +206,12 @@
   }
 
   .glow-primary {
-    box-shadow: 0 0 40px hsl(var(--primary) / 0.3), 
+    box-shadow: 0 0 40px hsl(var(--primary) / 0.3),
                 0 0 80px hsl(var(--primary) / 0.1);
   }
 
   .glow-accent {
-    box-shadow: 0 0 40px hsl(var(--accent) / 0.3), 
+    box-shadow: 0 0 40px hsl(var(--accent) / 0.3),
                 0 0 80px hsl(var(--accent) / 0.1);
   }
 
@@ -186,13 +223,21 @@
   .gradient-btn::before {
     content: '';
     @apply absolute inset-0 opacity-0 transition-opacity duration-300;
-    background: linear-gradient(135deg, hsl(280, 70%, 55%) 0%, hsl(250, 84%, 54%) 100%);
+    background: linear-gradient(
+      135deg,
+      hsl(280 70% 55%) 0%,
+      hsl(250 84% 54%) 100%
+    );
   }
 
   .gradient-btn:hover::before {
     @apply opacity-100;
   }
 }
+
+/* ============================
+   UTILITIES
+============================ */
 
 @layer utilities {
   .text-balance {
@@ -211,6 +256,10 @@
     animation-delay: 0.6s;
   }
 }
+
+/* ============================
+   CUSTOM EFFECTS
+============================ */
 
 /* Scroll Progress Bar */
 .scroll-progress {
